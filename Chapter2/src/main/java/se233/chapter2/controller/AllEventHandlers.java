@@ -12,13 +12,14 @@ import java.util.concurrent.ExecutionException;
 
 public class AllEventHandlers {
 
-    public static void onRefresh(){
-        try{
+    public static void onRefresh() {
+        try {
             Launcher.refreshPane();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     public static void onAdd() {
         try {
             TextInputDialog dialog = new TextInputDialog();
@@ -27,12 +28,12 @@ public class AllEventHandlers {
             dialog.setHeaderText(null);
             dialog.setGraphic(null);
             Optional<String> code = dialog.showAndWait();
-            if (code.isPresent()){
+            if (code.isPresent()) {
                 ArrayList<Currency> currency_list = Launcher.getCurrencyList();
                 Currency c = new Currency(code.get());
-                ArrayList<CurrencyEntity> c_list = FetchData.fetch_range(c.getShortCode(),8);
+                ArrayList<CurrencyEntity> c_list = FetchData.fetch_range(c.getShortCode(), 8);
                 c.setHistorical(c_list);
-                c.setCurrent(c_list.get(c_list.size() -1 ));
+                c.setCurrent(c_list.get(c_list.size() - 1));
                 currency_list.add(c);
                 Launcher.setCurrencyList(currency_list);
                 Launcher.refreshPane();
@@ -43,12 +44,13 @@ public class AllEventHandlers {
             e.printStackTrace();
         }
     }
+
     public static void onDelete(String code) {
         try {
             ArrayList<Currency> currency_list = Launcher.getCurrencyList();
             int index = -1;
-            for(int i=0 ; i<currency_list.size() ; i++) {
-                if (currency_list.get(i).getShortCode().equals(code) ) {
+            for (int i = 0; i < currency_list.size(); i++) {
+                if (currency_list.get(i).getShortCode().equals(code)) {
                     index = i;
                     break;
                 }
@@ -64,12 +66,13 @@ public class AllEventHandlers {
             e.printStackTrace();
         }
     }
+
     public static void onWatch(String code) {
         try {
             ArrayList<Currency> currency_list = Launcher.getCurrencyList();
             int index = -1;
-            for(int i=0 ; i<currency_list.size() ; i++) {
-                if (currency_list.get(i).getShortCode().equals(code) ) {
+            for (int i = 0; i < currency_list.size(); i++) {
+                if (currency_list.get(i).getShortCode().equals(code)) {
                     index = i;
                     break;
                 }
@@ -81,7 +84,10 @@ public class AllEventHandlers {
                 dialog.setHeaderText(null);
                 dialog.setGraphic(null);
                 Optional<String> retrievedRate = dialog.showAndWait();
-                if (retrievedRate.isPresent()){
+                // add && !retrievedRate.get().trim().equals("") for protect error
+                //
+
+                if (retrievedRate.isPresent() && !retrievedRate.get().trim().equals("")) {
                     double rate = Double.parseDouble(retrievedRate.get());
                     currency_list.get(index).setWatch(true);
                     currency_list.get(index).setWatchRate(rate);
@@ -97,21 +103,26 @@ public class AllEventHandlers {
             e.printStackTrace();
         }
     }
-    public static void onUnWatch(String code){
+
+    public static void onUnWatch(String code) {
+
+        ArrayList<Currency> currency_list = Launcher.getCurrencyList();
         try {
-            ArrayList<Currency> currency_list = Launcher.getCurrencyList();
             int index = -1;
-            for(int i=0 ; i<currency_list.size() ; i++) {
-                if (currency_list.get(i).getShortCode().equals(code) ) {
+            for (int i = 0; i < currency_list.size(); i++) {
+                if (currency_list.get(i).getShortCode().equals(code)) {
                     index = i;
                     break;
                 }
-        }
+            }
             if (index != -1) {
+                // set false for not show
+                currency_list.get(index).setWatch(false);
                 Launcher.setCurrencyList(currency_list);
                 Launcher.refreshPane();
             }
-    } catch (InterruptedException e) {
+
+        } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();
