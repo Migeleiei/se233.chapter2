@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 
+
 public class AllEventHandlers {
+
     public static void onRefresh(){
         try{
             Launcher.refreshPane();
@@ -90,6 +92,26 @@ public class AllEventHandlers {
                 Launcher.refreshPane();
             }
         } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+    }
+    public static void onUnWatch(String code){
+        try {
+            ArrayList<Currency> currency_list = Launcher.getCurrencyList();
+            int index = -1;
+            for(int i=0 ; i<currency_list.size() ; i++) {
+                if (currency_list.get(i).getShortCode().equals(code) ) {
+                    index = i;
+                    break;
+                }
+        }
+            if (index != -1) {
+                Launcher.setCurrencyList(currency_list);
+                Launcher.refreshPane();
+            }
+    } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
             e.printStackTrace();

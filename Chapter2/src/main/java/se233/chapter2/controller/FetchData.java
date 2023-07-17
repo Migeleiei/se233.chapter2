@@ -18,9 +18,8 @@ public class FetchData {
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     public static ArrayList<CurrencyEntity> fetch_range(String src, int N){
         String dateEnd = LocalDate.now().format(formatter);
-        String daateStart = LocalDate.now().minusDays(N).format(formatter);
-        String url_str = String.format("https://api.exchangerate.host/timeseries?" +
-                "base=THB&symbols=%s&start_date=%s&end_date=%s",src,daateStart,dateEnd);
+        String dateStart = LocalDate.now().minusDays(N).format(formatter);
+        String url_str = String.format("https://api.exchangerate.host/timeseries?base=THB&symbols=%s&start_date=%s&end_date=%s",src,dateStart,dateEnd);
         ArrayList<CurrencyEntity> histList = new ArrayList<>();
         String retrievedJson = null;
         try{
