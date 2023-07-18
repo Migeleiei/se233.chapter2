@@ -14,17 +14,14 @@ import se233.chapter2.controller.AllEventHandlers;
 import se233.chapter2.controller.draw.DrawGraphTask;
 import se233.chapter2.model.Currency;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.FutureTask;
+import java.util.concurrent.*;
 
 public class CurrencyPane extends BorderPane {
     private Currency currency;
     private Button watch;
     private Button delete;
     private Button unWatch;
-    public CurrencyPane(Currency currency){
+    public CurrencyPane(Currency currency) {
         this.watch = new Button("Watch");
         this.unWatch = new Button("Unwatch");
         this.delete = new Button("Delete");
@@ -57,7 +54,7 @@ public class CurrencyPane extends BorderPane {
             System.out.println("Encountered an interrupted exception.");
         }
     }
-    public void refreshPane (Currency currency) throws ExecutionException, InterruptedException{
+    public void refreshPane (Currency currency)  throws ExecutionException, InterruptedException{
         this.currency = currency;
         Pane currencyInfo = genInfoPane();
         FutureTask futureTask = new FutureTask<VBox>(new DrawGraphTask(currency));
@@ -69,7 +66,7 @@ public class CurrencyPane extends BorderPane {
         this.setLeft(currencyInfo);
         this.setCenter(currencyGraph);
     }
-    private Pane genInfoPane(){
+    private Pane genInfoPane() {
         VBox currencyInfoPane = new VBox(10);
         currencyInfoPane.setPadding(new Insets(5,25,5,25));
         currencyInfoPane.setAlignment(Pos.CENTER);
@@ -95,4 +92,6 @@ public class CurrencyPane extends BorderPane {
         ((HBox) topArea).setAlignment(Pos.CENTER_RIGHT);
         return topArea;
     }
+
+
 }

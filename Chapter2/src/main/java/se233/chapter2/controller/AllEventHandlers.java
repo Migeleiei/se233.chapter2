@@ -1,6 +1,7 @@
 package se233.chapter2.controller;
 
-import javafx.scene.control.TextInputDialog;
+import javafx.scene.control.*;
+import org.json.JSONException;
 import se233.chapter2.Launcher;
 import se233.chapter2.model.Currency;
 import se233.chapter2.model.CurrencyEntity;
@@ -21,27 +22,38 @@ public class AllEventHandlers {
     }
 
     public static void onAdd() {
-        try {
-            TextInputDialog dialog = new TextInputDialog();
-            dialog.setTitle("Add Currency");
-            dialog.setContentText("Currency code:");
-            dialog.setHeaderText(null);
-            dialog.setGraphic(null);
-            Optional<String> code = dialog.showAndWait();
-            if (code.isPresent()) {
-                ArrayList<Currency> currency_list = Launcher.getCurrencyList();
-                Currency c = new Currency(code.get());
-                ArrayList<CurrencyEntity> c_list = FetchData.fetch_range(c.getShortCode(), 8);
-                c.setHistorical(c_list);
-                c.setCurrent(c_list.get(c_list.size() - 1));
-                currency_list.add(c);
-                Launcher.setCurrencyList(currency_list);
-                Launcher.refreshPane();
+        boolean isDone = true;
+        while(isDone = true) {
+            try {
+                TextInputDialog dialog = new TextInputDialog();
+                dialog.setTitle("Add Currency");
+                dialog.setContentText("Currency code:");
+                dialog.setHeaderText(null);
+                dialog.setGraphic(null);
+                Optional<String> code = dialog.showAndWait();
+                if (code.isPresent()) {
+                    ArrayList<Currency> currency_list = Launcher.getCurrencyList();
+                    Currency c = new Currency(code.get().toUpperCase());
+                    ArrayList<CurrencyEntity> c_list = FetchData.fetch_range(c.getShortCode(), 8);
+                    c.setHistorical(c_list);
+                    c.setCurrent(c_list.get(c_list.size() - 1));
+                    currency_list.add(c);
+                    Launcher.setCurrencyList(currency_list);
+                    Launcher.refreshPane();
+                }
+                isDone = false;
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            } catch (ExecutionException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.setTitle(null);
+                alert.setHeaderText(null);
+                alert.setContentText("You input wrong Currency code");
+                alert.showAndWait();
             }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
         }
     }
 
