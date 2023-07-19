@@ -7,7 +7,6 @@ import javafx.stage.Stage;
 import se233.chapter2.controller.Initialize;
 import se233.chapter2.controller.RefreshTask;
 import se233.chapter2.model.Currency;
-import se233.chapter2.view.CurrencyPane;
 import se233.chapter2.view.CurrencyParentPane;
 import se233.chapter2.view.TopPane;
 
